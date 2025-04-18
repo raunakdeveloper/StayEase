@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Listing Details</title>
+</head>
+<body>
+    <div class="plant-details-card">
+        <h2><%= listing.title %></h2>
+        <img src="<%= listing.image.url %>" alt="<%= listing.image.filename %>" class="plant-image">
+        <p><strong>Description:</strong> <%= listing.description %></p>
+        <p><strong>Price:</strong> &#8377;<%= listing.price.toLocaleString("en-IN") %></p>
+        <p><strong>Location:</strong> <%= listing.location %></p>
+        <p><strong>Country:</strong> <%= listing.country %></p>
+        <p><strong>Status:</strong> <%= listing.status %></p>
+        <p><strong>Offer Type:</strong> <%= listing.offerType %></p>
+        <p><strong>Care Level:</strong> <%= listing.careLevel %></p>
+        <p><strong>Light Needs:</strong> <%= listing.lightNeeds %></p>
+
+        <form action="/listings/<%= listing._id %>/edit" method="get">
+            <button type="submit" class="edit-button">Edit</button>
+        </form>
+
+        <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST">
+            <button type="submit" class="delete-button">Delete</button>
+        </form>
+        
+        <a href="/listings" class="back-to-listings">Back to Listings</a>
+    </div>
+</body>
+</html>
