@@ -1,59 +1,56 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const Review = require("./review.js");
 
-const plantSchema = new Schema({
-  title: {
-    type: String,
-    required: true, // e.g., "Spider Plant Baby" or "Rare Monstera Cutting"
-  },
-  description: {
-    type: String,
-  },
-  image: {
-    filename: String,
-    url: {
+const listingSchema = new Schema(
+  {
+    title: {
       type: String,
-      default: "https://images.unsplash.com/photo-plant-default", // You can swap this with a real plant image
-      set: (v) =>
-        v === ""
-          ? "https://images.unsplash.com/photo-plant-default"
-          : v,
+      required: true,
     },
+    description: {
+      type: String,
+    },
+    image: {
+      filename: String,
+      url: {
+        type: String,
+        default:
+          "https://plus.unsplash.com/premium_photo-1661913412680-c274b6fea096?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhY2glMjBob21lfGVufDB8fDB8fHww",
+        set: (v) =>
+          v === ""
+            ? "https://plus.unsplash.com/premium_photo-1661913412680-c274b6fea096?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhY2glMjBob21lfGVufDB8fDB8fHww"
+            : v,
+      },
+    },
+    location: {
+      type: String,
+      required: true,
+    },
+    country: {
+      type: String,
+      default: "USA",
+    },
+    price: {
+      type: Number,
+      default: 0,
+    },
+    reviews: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Review",
+      }
+    ]
   },
-  location: {
-    type: String,
-    required: true, // e.g., "Brooklyn, NY"
-  },
-  country: {
-    type: String,
-    default: "USA", // or make this optional if location is enough
-  },
-  status: {
-    type: String,
-    enum: ["Available", "Pending", "Swapped"],
-    default: "Available",
-  },
-  offerType: {
-    type: String,
-    enum: ["Free", "Swap", "Sale"],
-    default: "Free",
-  },
-  price: {
-    type: Number,
-    default: 0, // Used only if offerType === "Sale"
-  },
-  careLevel: {
-    type: String,
-    enum: ["Easy", "Medium", "Hard"],
-    default: "Easy",
-  },
-  lightNeeds: {
-    type: String,
-    enum: ["Low", "Medium", "High"],
-    default: "Medium",
-  },
-}, { timestamps: true });
+  { timestamps: true }
+);
 
-const Plant = mongoose.model("Plant", plantSchema);
+listingSchema.post("findOneAndDelete", async (listing) => {
+  if(listing) {
+    await Review.deleteMany({_id: {$in: listing.reviews}});
+  }
+});
 
-module.exports = Plant;
+const Listing = mongoose.model("Listing", listingSchema);
+
+module.exports = Listing;

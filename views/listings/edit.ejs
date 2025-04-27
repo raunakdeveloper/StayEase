@@ -1,66 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Plant Listing</title>
+<% layout("/layouts/boilerplate") %>
+
+<title>Edit Listing | StayEase</title>
 </head>
-<body>
-    <h2>Edit Plant Listing</h2>
+<div class="container my-5">
+    <h2 class="mb-4">Edit Listing</h2>
 
-    <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
-        <label for="title">Title:</label>
-        <input type="text" name="listing[title]" id="title" value="<%= listing.title %>"><br>
+    <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" name="listing[title]" id="title" value="<%= listing.title %>" class="form-control" required>
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Please provide a title.</div>
+        </div>
 
-        <label for="description">Description:</label>
-        <textarea name="listing[description]" id="description"><%= listing.description %></textarea><br>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="listing[description]" id="description" class="form-control" rows="4" required><%= listing.description %></textarea>
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Please provide a description.</div>
+        </div>
 
-        <label for="price">Price:</label>
-        <input type="number" name="listing[price]" id="price" value="<%= listing.price %>"><br>
+        <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input type="number" name="listing[price]" id="price" value="<%= listing.price %>" class="form-control" min="0" required>
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Please enter a valid price.</div>
+        </div>
 
-        <label for="location">Location:</label>
-        <input type="text" name="listing[location]" id="location" value="<%= listing.location %>"><br>
+        <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" name="listing[location]" id="location" value="<%= listing.location %>" class="form-control" required>
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Please provide a location.</div>
+        </div>
 
-        <label for="country">Country:</label>
-        <input type="text" name="listing[country]" id="country" value="<%= listing.country %>"><br>
+        <div class="mb-4">
+            <label class="form-label">Current Image</label><br>
+            <img src="<%= listing.image.url %>" alt="Current Listing Image" class="img-fluid rounded mb-2" style="max-width: 300px;">
+        </div>
 
-        <label for="status">Status:</label>
-        <select name="listing[status]" id="status">
-            <option value="Available" <%= listing.status === "Available" ? "selected" : "" %>>Available</option>
-            <option value="Pending" <%= listing.status === "Pending" ? "selected" : "" %>>Pending</option>
-            <option value="Swapped" <%= listing.status === "Swapped" ? "selected" : "" %>>Swapped</option>
-        </select><br>
+        <div class="mb-3">
+            <label for="image" class="form-label">Change Image</label>
+            <input type="file" name="image" id="image" class="form-control" accept="image/*">
+        </div>
 
-        <label for="offerType">Offer Type:</label>
-        <select name="listing[offerType]" id="offerType">
-            <option value="Free" <%= listing.offerType === "Free" ? "selected" : "" %>>Free</option>
-            <option value="Swap" <%= listing.offerType === "Swap" ? "selected" : "" %>>Swap</option>
-            <option value="Sale" <%= listing.offerType === "Sale" ? "selected" : "" %>>Sale</option>
-        </select><br>
-
-        <label for="careLevel">Care Level:</label>
-        <select name="listing[careLevel]" id="careLevel">
-            <option value="Easy" <%= listing.careLevel === "Easy" ? "selected" : "" %>>Easy</option>
-            <option value="Medium" <%= listing.careLevel === "Medium" ? "selected" : "" %>>Medium</option>
-            <option value="Hard" <%= listing.careLevel === "Hard" ? "selected" : "" %>>Hard</option>
-        </select><br>
-
-        <label for="lightNeeds">Light Needs:</label>
-        <select name="listing[lightNeeds]" id="lightNeeds">
-            <option value="Low" <%= listing.lightNeeds === "Low" ? "selected" : "" %>>Low</option>
-            <option value="Medium" <%= listing.lightNeeds === "Medium" ? "selected" : "" %>>Medium</option>
-            <option value="High" <%= listing.lightNeeds === "High" ? "selected" : "" %>>High</option>
-        </select><br>
-
-        <label for="image">Current Image:</label><br>
-        <img src="<%= listing.image.url %>" alt="Current Image" style="max-width: 300px;"><br>
-
-        <label for="image">Change Image:</label>
-        <input type="file" name="image" id="image" accept="image/*"><br>
-
-        <button type="submit" class="submit-button">Update Listing</button>
+        <button type="submit" class="btn btn-primary">Update Listing</button>
+        <a href="/listings/<%= listing._id %>" class="btn btn-outline-secondary ms-2">Back to Listing</a>
     </form>
 
-    <a href="/listings/<%= listing._id %>" class="back-to-listing">Back to Listing</a>
-</body>
+    <script src="/js/formValidation.js"></script>
+</div>
 </html>
+    

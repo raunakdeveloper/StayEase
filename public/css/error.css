@@ -1,0 +1,11 @@
+/* Custom Alert Styling */
+.alert-danger {
+    font-size: 1.1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.alert-heading {
+    font-size: 1.2rem;
+}

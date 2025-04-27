@@ -1,0 +1,53 @@
+/* showListing.css */
+
+/* Listing Image */
+.card-img-top {
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+/* Main Listing Card */
+.card {
+    border-radius: 16px;
+    background-color: #ffffff;
+}
+
+/* Buttons */
+.btn-primary, .btn-danger, .btn-outline-secondary {
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+/* Review Section */
+.review-form {
+    background-color: #f8f9fa;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+/* Review Cards */
+.review-card {
+    background-color: #ffffff;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Star Badge */
+.badge {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+/* Form Validation */
+.was-validated .form-control:invalid,
+.form-control.is-invalid {
+    border-color: #dc3545;
+}

@@ -1,17 +1,37 @@
-<nav>
-    <div class="logo">
-        <img src="/api/placeholder/40/40" alt="Plant Logo">
+<link rel="stylesheet" href="/css/common.css">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="#">
+        StayEasy
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Explore</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About Us</a>
+          </li>
+        </ul>
+  
+        <form class="d-flex me-3">
+          <input class="form-control rounded-pill me-2" type="search" placeholder="Search hotels..." aria-label="Search">
+          <button class="btn btn-primary rounded-pill" type="submit"><i class="fas fa-search"></i></button>
+        </form>
+  
+        <div class="d-flex align-items-center">
+          <a href="#" class="btn btn-outline-primary rounded-pill me-2">Become a Host</a>
+          <a href="#" class="btn btn-primary rounded-pill">Login</a>
+        </div>
+      </div>
     </div>
-    <ul class="nav-links">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Plant Finder</a></li>
-        <li><a href="#">Products</a></li>
-        <li><a href="#">About us</a></li>
-        <li><a href="#">Contact</a></li>
-        <li><a href="#">My plants</a></li>
-    </ul>
-    <div class="nav-icons">
-        <a href="#"><i class="fas fa-user"></i></a>
-        <a href="#"><i class="fas fa-shopping-cart"></i></a>
-    </div>
-</nav>
+  </nav>
+  

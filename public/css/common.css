@@ -1,0 +1,93 @@
+/* styles.css */
+
+/* --- Navbar Styling --- */
+.navbar {
+    background-color: #ffffff;
+    padding: 0.8rem 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #007bff;
+}
+
+.navbar-nav .nav-link {
+    margin-right: 20px;
+    font-weight: 500;
+    color: #333;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #007bff;
+}
+
+/* Footer Styling */
+.footer {
+    background-color: #ffffff; /* White background for the footer */
+    padding: 2rem 0; /* More padding for spacious look */
+    color: #333; /* Dark text color for contrast */
+    border-top: 2px solid #ddd; /* Light gray border on top */
+}
+
+/* Social Media Icons */
+.footer .fa-brands {
+    transition: transform 0.3s ease;
+}
+
+.footer .fa-brands:hover {
+    transform: scale(1.2); /* Slightly enlarge icons on hover */
+}
+
+/* Footer Links */
+.footer a {
+    text-decoration: none;
+    color: #333; /* Dark text color for links */
+    margin: 0 15px; /* More space between the links */
+    font-weight: 500;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.footer a:hover {
+    color: #f8c008; /* Yellow color on hover */
+    text-decoration: underline;
+}
+
+/* Container for Footer content */
+.footer .container {
+    max-width: 1200px;
+}
+
+/* Stack the content in a column direction on smaller screens */
+.footer .row {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center the content horizontally */
+    justify-content: center; /* Center the content vertically */
+}
+
+/* For individual sections */
+.footer .col-12 {
+    margin-bottom: 15px; /* Space between each section */
+}
+
+@media (max-width: 768px) {
+    /* For smaller screens, ensure the content is well-spaced */
+    .footer .col-12 {
+        text-align: center;
+    }
+}
+
+/* --- Body Styling (optional) --- */
+body {
+    background-color: #f5f7fa;
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1; /* makes sure footer always sticks to bottom */
+}

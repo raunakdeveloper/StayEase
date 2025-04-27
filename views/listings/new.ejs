@@ -1,63 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create New Plant Listing</title>
+<% layout("/layouts/boilerplate") %>
+
+<title>Create New Listing | StayEase</title>
 </head>
-<body>
-    <h2>Create New Plant Listing</h2>
+<div class="container my-5">
+    <h2 class="mb-4">Create New Listing</h2>
 
-    <form action="/listings" method="POST" enctype="multipart/form-data">
-        <label for="title">Title:</label>
-        <input type="text" name="listing[title]" id="title" placeholder="Enter title"><br>
+    <form action="/listings" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" name="listing[title]" id="title" class="form-control" placeholder="Enter title" required>
+            <div class="invalid-feedback">Please enter a title.</div>
+        </div>
 
-        <label for="description">Description:</label>
-        <textarea name="listing[description]" id="description" placeholder="Enter description"></textarea><br>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="listing[description]" id="description" class="form-control" rows="4" placeholder="Enter description" required></textarea>
+            <div class="invalid-feedback">Please enter a description.</div>
+        </div>
 
-        <label for="price">Price:</label>
-        <input type="number" name="listing[price]" id="price" placeholder="Enter price"><br>
+        <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input type="number" name="listing[price]" id="price" class="form-control" placeholder="Enter price" min="0" required>
+            <div class="invalid-feedback">Please enter a valid price.</div>
+        </div>
 
-        <label for="location">Location:</label>
-        <input type="text" name="listing[location]" id="location" placeholder="Enter location"><br>
+        <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" name="listing[location]" id="location" class="form-control" placeholder="Enter location" required>
+            <div class="invalid-feedback">Please enter a location.</div>
+        </div>
 
-        <label for="country">Country:</label>
-        <input type="text" name="listing[country]" id="country" placeholder="Enter country"><br>
+        <div class="mb-3">
+            <label for="country" class="form-label">Country</label>
+            <input type="text" name="listing[country]" id="country" class="form-control" placeholder="Enter country" required>
+            <div class="invalid-feedback">Please enter a country.</div>
+        </div>
 
-        <label for="status">Status:</label>
-        <select name="listing[status]" id="status">
-            <option value="Available">Available</option>
-            <option value="Pending">Pending</option>
-            <option value="Swapped">Swapped</option>
-        </select><br>
+        <div class="mb-4">
+            <label for="image" class="form-label">Select Image</label>
+            <input type="file" name="image" id="image" class="form-control" accept="image/*">
+        </div>
 
-        <label for="offerType">Offer Type:</label>
-        <select name="listing[offerType]" id="offerType">
-            <option value="Free">Free</option>
-            <option value="Swap">Swap</option>
-            <option value="Sale">Sale</option>
-        </select><br>
-
-        <label for="careLevel">Care Level:</label>
-        <select name="listing[careLevel]" id="careLevel">
-            <option value="Easy">Easy</option>
-            <option value="Medium">Medium</option>
-            <option value="Hard">Hard</option>
-        </select><br>
-
-        <label for="lightNeeds">Light Needs:</label>
-        <select name="listing[lightNeeds]" id="lightNeeds">
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-        </select><br>
-
-        <label for="image">Select Image:</label>
-        <input type="file" name="image" id="image" accept="image/*"><br>
-
-        <button type="submit" class="submit-button">Create Listing</button>
+        <button type="submit" class="btn btn-success">Create Listing</button>
+        <a href="/listings" class="btn btn-outline-secondary ms-2">Back to Listings</a>
     </form>
 
-    <a href="/listings" class="back-to-listings">Back to Listings</a>
+    <script src="/js/formValidation.js"></script>
 </body>
 </html>
+    
