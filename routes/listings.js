@@ -6,6 +6,7 @@ const upload = multer({ dest: "uploads/" });
 const { listingSchema } = require("../schema");
 const wrapAsync = require("../utils/wrapAsync");
 const ExpressError = require("../utils/ExpressError");
+const { isLoggedIn } = require("../middleware/auth");
 
 // Validation middleware
 const validateListing = (req, res, next) => {
@@ -30,13 +31,14 @@ router.get(
 );
 
 // Show form to create new listing
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
   res.render("listings/new");
 });
 
 // Create a new listing
 router.post(
   "/",
+  isLoggedIn,
   upload.single("image"),
   validateListing,
   wrapAsync(async (req, res) => {
@@ -75,6 +77,7 @@ router.get(
 // Show form to edit a listing
 router.get(
   "/:id/edit",
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
     const listing = await Listing.findById(id);
@@ -91,6 +94,7 @@ router.get(
 // Update a listing
 router.put(
   "/:id",
+  isLoggedIn,
   upload.single("image"),
   validateListing,
   wrapAsync(async (req, res) => {
@@ -119,6 +123,7 @@ router.put(
 // Delete a listing
 router.delete(
   "/:id",
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
     const deletedListing = await Listing.findByIdAndDelete(id);

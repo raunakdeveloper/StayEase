@@ -4,6 +4,7 @@ const User = require("../models/user"); // User model
 const { userSchema } = require("../schema"); // Joi validation schema
 const bcrypt = require("bcrypt"); // For password hashing (recommended)
 const passport = require("passport");
+const wrapAsync = require("../utils/wrapAsync");
 
 // Validation middleware
 const validateUser = (req, res, next) => {
