@@ -1,44 +1,68 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const mongoose = require('mongoose');
-const path = require('path');
-const methodOverride = require('method-override');
-const ejsMate = require('ejs-mate');
-const ExpressError = require('./utils/ExpressError');
-require('dotenv').config();
+const mongoose = require("mongoose");
+const path = require("path");
+const methodOverride = require("method-override");
+const ejsMate = require("ejs-mate");
+const ExpressError = require("./utils/ExpressError");
+require("dotenv").config();
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const flash = require("connect-flash");
+
+app.use(cookieParser());
+
+const sessionOptions = {
+  secret: process.env.SESSION_SECRET_KEY || "thisshouldbeabettersecret",
+  resave: false,
+  saveUninitialized: true,
+};
+
+app.use(session(sessionOptions));
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+});
 
 // Routes
-const listingRoutes = require('./routes/listings');
-const reviewRoutes = require('./routes/reviews');
+const listingRoutes = require("./routes/listings");
+const reviewRoutes = require("./routes/reviews");
+const authRoutes = require("./routes/auth");
 
 // Connect MongoDB
 async function main() {
   await mongoose.connect(process.env.MONGO_URI);
 }
 main()
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.log(err));
 
 // Middleware
-app.engine('ejs', ejsMate);
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.engine("ejs", ejsMate);
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride('_method'));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(methodOverride("_method"));
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes
-app.get('/', (req, res) => {
-  res.redirect('/listings');
+app.get("/", (req, res) => {
+  res.redirect("/listings");
 });
-app.use('/listings', listingRoutes);
-app.use('/listings/:id/reviews', reviewRoutes);
+
+app.use("/listings", listingRoutes);
+app.use("/listings/:id/reviews", reviewRoutes);
+app.use("/", authRoutes);
+app.use("/", authRoutes);
 
 // Error Handler
 app.use((err, req, res, next) => {
-  const { statusCode = 500, message = 'Something went wrong' } = err;
-  res.status(statusCode).render('error', { message });
+  const { statusCode = 500, message = "Something went wrong" } = err;
+  res.status(statusCode).render("error", { message });
 });
 
 // Server
