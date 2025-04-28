@@ -9,6 +9,9 @@ require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user"); // Missing!
 
 app.use(cookieParser());
 
@@ -16,10 +19,22 @@ const sessionOptions = {
   secret: process.env.SESSION_SECRET_KEY || "thisshouldbeabettersecret",
   resave: false,
   saveUninitialized: true,
+  cookie: {
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+    httpOnly: true,
+  },
 };
 
 app.use(session(sessionOptions));
 app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");

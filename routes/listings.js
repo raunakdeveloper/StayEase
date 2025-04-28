@@ -3,10 +3,9 @@ const router = express.Router();
 const Listing = require("../models/listing");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
-const { listingSchema, reviewSchema } = require("../schema");
+const { listingSchema } = require("../schema");
 const wrapAsync = require("../utils/wrapAsync");
 const ExpressError = require("../utils/ExpressError");
-const methodOverride = require("method-override");
 
 // Validation middleware
 const validateListing = (req, res, next) => {
@@ -19,7 +18,9 @@ const validateListing = (req, res, next) => {
   }
 };
 
-// Routes
+// ================= Routes =================
+
+// Show all listings
 router.get(
   "/",
   wrapAsync(async (req, res) => {
@@ -28,61 +29,106 @@ router.get(
   })
 );
 
+// Show form to create new listing
 router.get("/new", (req, res) => {
   res.render("listings/new");
 });
 
+// Create a new listing
 router.post(
   "/",
   upload.single("image"),
   validateListing,
   wrapAsync(async (req, res) => {
     const newListing = new Listing(req.body.listing);
+
+    // Handle uploaded image if present
+    if (req.file) {
+      newListing.image = {
+        url: `/uploads/${req.file.filename}`,
+        filename: req.file.filename,
+      };
+    }
+
     await newListing.save();
+    req.flash("success", "New Listing Created Successfully!");
     res.redirect("/listings");
   })
 );
 
+// Show a specific listing
 router.get(
   "/:id",
   wrapAsync(async (req, res) => {
-    const listing = await Listing.findById(req.params.id).populate("reviews");
+    const { id } = req.params;
+    const listing = await Listing.findById(id).populate("reviews");
+
+    if (!listing) {
+      req.flash("error", "Listing not found.");
+      return res.redirect("/listings");
+    }
+
     res.render("listings/show", { listing });
   })
 );
 
+// Show form to edit a listing
 router.get(
   "/:id/edit",
   wrapAsync(async (req, res) => {
-    const listing = await Listing.findById(req.params.id);
+    const { id } = req.params;
+    const listing = await Listing.findById(id);
+
+    if (!listing) {
+      req.flash("error", "Cannot edit. Listing not found.");
+      return res.redirect("/listings");
+    }
+
     res.render("listings/edit", { listing });
   })
 );
 
+// Update a listing
 router.put(
   "/:id",
   upload.single("image"),
   validateListing,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
-    const updatedListing = { ...req.body.listing };
+    const updatedData = { ...req.body.listing };
 
     if (req.file) {
-      updatedListing.image = {
+      updatedData.image = {
         url: `/uploads/${req.file.filename}`,
         filename: req.file.filename,
       };
     }
-    await Listing.findByIdAndUpdate(id, updatedListing);
+
+    const updatedListing = await Listing.findByIdAndUpdate(id, updatedData);
+
+    if (!updatedListing) {
+      req.flash("error", "Update failed. Listing not found.");
+      return res.redirect("/listings");
+    }
+
+    req.flash("success", "Listing Updated Successfully!");
     res.redirect(`/listings/${id}`);
   })
 );
 
+// Delete a listing
 router.delete(
   "/:id",
   wrapAsync(async (req, res) => {
     const { id } = req.params;
-    await Listing.findByIdAndDelete(id);
+    const deletedListing = await Listing.findByIdAndDelete(id);
+
+    if (!deletedListing) {
+      req.flash("error", "Delete failed. Listing not found.");
+      return res.redirect("/listings");
+    }
+
+    req.flash("success", "Listing Deleted Successfully!");
     res.redirect("/listings");
   })
 );
