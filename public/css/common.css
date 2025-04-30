@@ -24,11 +24,15 @@
 }
 
 /* Footer Styling */
+
 .footer {
     background-color: #ffffff; /* White background for the footer */
-    padding: 2rem 0; /* More padding for spacious look */
+    padding: 0.5rem 0; /* More padding for spacious look */
     color: #333; /* Dark text color for contrast */
     border-top: 2px solid #ddd; /* Light gray border on top */
+}
+.footer .container{
+    margin-top: 0 !important;
 }
 
 /* Social Media Icons */
