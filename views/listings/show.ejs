@@ -10,6 +10,7 @@
     <img src="<%= listing.image.url %>" alt="<%= listing.image.filename %>" class="card-img-top mb-4" style="max-height: 400px; object-fit: cover;">
 
     <div class="card-body">
+      <p><strong>Owner:</strong> <%= listing.owner.username %></p>
       <p><strong>Description:</strong> <%= listing.description %></p>
       <p><strong>Price:</strong> ₹<%= listing.price.toLocaleString("en-IN") %></p>
       <p><strong>Location:</strong> <%= listing.location %></p>
@@ -17,17 +18,20 @@
     </div>
 
     <div class="d-flex gap-2 mt-4">
+    <% if(currUser && currUser._id.equals(listing.owner._id)) {%>
       <a href="/listings/<%= listing._id %>/edit" class="btn btn-primary">Edit</a>
 
       <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST" class="d-inline">
         <button type="submit" class="btn btn-danger">Delete</button>
       </form>
+    <%}%>
 
       <a href="/listings" class="btn btn-outline-secondary ms-auto">Back to Listings</a>
     </div>
   </div>
 
   <!-- Review Form -->
+   <% if(currUser){ %>
   <div class="col-md-8 offset-md-2 mb-5">
     <hr>
     <h4 class="mb-4">Leave a Review</h4>
@@ -44,6 +48,7 @@
       <button class="btn btn-outline-dark" type="submit">Submit</button>
     </form>
   </div>
+  <% } %>
 
   <!-- All Reviews -->
   <hr>
@@ -56,6 +61,7 @@
             <div class="mb-2">
               <span class="badge bg-warning text-dark"><%= review.rating %> ⭐</span>
             </div>
+            <p class="card-title mb-4"><strong>@<%= review.author.username></strong></p>
             <p class="card-text mb-4"><%= review.comment %></p>
             <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST" class="mt-auto">
               <button type="submit" class="btn btn-danger btn-sm">Delete</button>

@@ -19,6 +19,10 @@ const initDB = async () => {
   try {
     // Optional: Clear existing data from the collection (if you want to reset)
     await Listing.deleteMany({});
+    initData.data = initData.data.map((obj) => ({
+      ...obj,
+      owner: "6811bf9df4c6d63a846294e7",
+    }));
     console.log("Existing data cleared");
 
     // Insert the new data from initData
