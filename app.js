@@ -8,6 +8,8 @@ const ExpressError = require("./utils/ExpressError");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
+
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -16,10 +18,16 @@ const { isLoggedIn } = require("./middleware/auth");
 
 app.use(cookieParser());
 
+const sessionStore = MongoStore.create({
+  mongoUrl: process.env.MONGO_URI,
+  touchAfter: 24 * 3600, // Lazy update every 24h
+});
+
 const sessionOptions = {
+  store: sessionStore,
   secret: process.env.SESSION_SECRET_KEY || "thisshouldbeabettersecret",
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: {
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,
