@@ -1,4 +1,4 @@
-const Listing = require("../models/listing");
+const User = require("../models/user");
 
 module.exports.showRegisterForm = async (req, res) => {
   res.render("auth/register");
