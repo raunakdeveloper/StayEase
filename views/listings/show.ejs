@@ -1,5 +1,12 @@
 <% layout("/layouts/boilerplate") %>
 <title><%= listing.title %> | StayEase</title>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
 
 <div class="container my-5">
 
@@ -83,4 +90,28 @@
     <% } %>
   </div>
 
+  <!-- Map Section -->
+<h4 class="mb-3">Approximate Location</h4>
+<div id="map" style="height: 400px;" class="mb-5 rounded shadow-sm"></div>
+
 </div>
+
+<script>
+  // You can make this a bit fuzzy for privacy if needed
+  const lat = <%= listing.geometry?.coordinates[1] || 28.6139 %>; // fallback: Delhi lat
+  const lng = <%= listing.geometry?.coordinates[0] || 77.2090 %>; // fallback: Delhi lng
+
+  const map = L.map('map').setView([lat, lng], 12);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Optional fuzzy location offset
+  const offsetLat = lat + (Math.random() - 0.5) * 0.02;
+  const offsetLng = lng + (Math.random() - 0.5) * 0.02;
+
+  L.marker([offsetLat, offsetLng]).addTo(map)
+    .bindPopup('Approximate Location')
+    .openPopup();
+</script>
