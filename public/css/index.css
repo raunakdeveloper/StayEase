@@ -14,20 +14,6 @@ body {
     margin-bottom: 20px;
 }
 
-/* Create New button */
-.create-btn {
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-weight: 500;
-    background-color: #28a745;
-    border: none;
-    transition: background-color 0.3s ease;
-}
-
-.create-btn:hover {
-    background-color: #218838;
-}
-
 /* Listings grid styling */
 .listings-grid {
     display: grid;
@@ -73,6 +59,28 @@ body {
 .listing-location {
     font-size: 1rem;
     color: #555;
+}
+
+#filters {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.filter {
+    text-align: center;
+    opacity: 0.7;
+    text-decoration: none;
+    color: inherit;
+    margin: 0 10px;
+}
+
+.filter:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.filter p {
+    font-size: 0.8rem;
 }
 
 /* Responsive styling for smaller screens */

@@ -20,6 +20,7 @@ const User = require("./models/user"); // Missing!
 const { isLoggedIn } = require("./middleware/auth");
 
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, "public")));
 
 const sessionStore = MongoStore.create({
   mongoUrl: process.env.MONGO_URI,

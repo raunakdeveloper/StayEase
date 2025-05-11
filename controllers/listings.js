@@ -1,9 +1,14 @@
 const Listing = require("../models/listing");
+const fetch = require("node-fetch");
+
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
 module.exports.listAllListings = async (req, res) => {
-  const allListings = await Listing.find({});
+  const { category } = req.query;
+  const filter = category ? { category } : {};
+
+  const allListings = await Listing.find(filter);
   res.render("listings/index", { allListings });
 };
 
