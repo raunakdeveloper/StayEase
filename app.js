@@ -24,7 +24,14 @@ app.use(express.static(path.join(__dirname, "public")));
 
 const sessionStore = MongoStore.create({
   mongoUrl: process.env.MONGO_URI,
-  touchAfter: 24 * 3600, // Lazy update every 24h
+  crypto: {
+    secret: process.env.SESSION_SECRET_KEY || "thisshouldbeabettersecret",
+  },
+  touchAfter: 24 * 3600,
+});
+
+sessionStore.on("error", () => {
+  console.log("ERROR in mongoose store.", err);
 });
 
 const sessionOptions = {

@@ -16,16 +16,21 @@
           </li>
         </ul>
   
-        <a href="/listings/new" class="btn create-btn">Become a host</a>
-        
-        <div class="d-flex align-items-center">
-          <% if(!currUser){ %>
-            <a href="/login" class="btn btn-primary rounded-pill">Login</a>
+        <form class="d-flex mx-auto" action="/listings" method="GET">
+          <input class="form-control me-2" type="search" name="search" placeholder="Search listings..." />
+          <button class="btn btn-outline-primary" type="submit">Search</button>
+        </form>        
+      
+        <a href="/listings/new" class="btn create-btn me-3">Become a host</a>
+
+        <div class="d-flex align-items-center gap-2">
+          <% if (!currUser) { %>
+            <a href="/login" class="btn btn-primary rounded-pill me-2">Login</a>
             <a href="/register" class="btn btn-primary rounded-pill">Sign Up</a>  
-          <%}%>
-          <% if(currUser){%>
-            <a href="/logout" class="btn btn-outline-primary rounded-pill me-2">Logout <i class="fa-solid fa-right-from-bracket"></i></a>
-          <% }%>
+          <% } %>
+          <% if (currUser) { %>
+            <a href="/logout" class="btn btn-outline-primary rounded-pill">Logout <i class="fa-solid fa-right-from-bracket"></i></a>
+          <% } %>
         </div>
       </div>
     </div>

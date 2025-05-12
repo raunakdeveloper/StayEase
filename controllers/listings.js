@@ -5,8 +5,17 @@ const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
 module.exports.listAllListings = async (req, res) => {
-  const { category } = req.query;
-  const filter = category ? { category } : {};
+  const { category, search } = req.query;
+
+  let filter = {};
+
+  if (category) {
+    filter.category = category;
+  }
+
+  if (search) {
+    filter.location = { $regex: search, $options: "i" }; // Case-insensitive location search
+  }
 
   const allListings = await Listing.find(filter);
   res.render("listings/index", { allListings });
@@ -20,9 +29,32 @@ module.exports.createListing = async (req, res) => {
   const newListing = new Listing(req.body.listing);
   newListing.owner = req.user._id;
 
+  // Get coordinates from Nominatim
+  const geoData = await fetch(
+    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+      newListing.location
+    )}`,
+    {
+      headers: {
+        "User-Agent": "StayEaseApp/1.0 (prachiiyadav2409@gmail.com)",
+      },
+    }
+  );
+  const data = await geoData.json();
+
+  if (data.length > 0) {
+    newListing.geometry = {
+      type: "Point",
+      coordinates: [parseFloat(data[0].lon), parseFloat(data[0].lat)],
+    };
+  } else {
+    req.flash("error", "Location not found. Please try a different location.");
+    return res.redirect("/listings/new");
+  }
+
   if (req.file) {
     newListing.image = {
-      url: `/uploads/${req.file.filename}`,
+      url: req.file.path,
       filename: req.file.filename,
     };
   }
@@ -65,7 +97,7 @@ module.exports.updateListing = async (req, res) => {
 
   if (req.file) {
     updatedData.image = {
-      url: `/uploads/${req.file.filename}`,
+      url: req.file.path,
       filename: req.file.filename,
     };
   }

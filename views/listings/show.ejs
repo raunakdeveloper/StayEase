@@ -5,8 +5,7 @@
   href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
 <script>
-  const lat = <%= listing.geometry?.coordinates[1] || 28.6139 %>;
-  const lng = <%= listing.geometry?.coordinates[0] || 77.2090 %>;
+  const coordinates = <%- JSON.stringify(listing.geometry?.coordinates || [77.2090, 28.6139]) %>;
 </script>
 <script
   src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"

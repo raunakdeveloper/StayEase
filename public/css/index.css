@@ -61,6 +61,10 @@ body {
     color: #555;
 }
 
+.tax-info{
+    display: none;
+}
+
 #filters {
     display: flex;
     flex-wrap: wrap;
