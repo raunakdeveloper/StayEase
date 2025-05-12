@@ -1,4 +1,4 @@
-if (process.env.NODE_ENV != "production") {
+if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
@@ -12,26 +12,46 @@ const ExpressError = require("./utils/ExpressError");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
-
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
-const User = require("./models/user"); // Missing!
-const { isLoggedIn } = require("./middleware/auth");
+const User = require("./models/user");
 
+// Route files
+const listingRoutes = require("./routes/listings");
+const reviewRoutes = require("./routes/reviews");
+const authRoutes = require("./routes/auth");
+
+// Connect to MongoDB
+async function main() {
+  await mongoose.connect(process.env.MONGO_URI);
+}
+main()
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
+
+// View engine setup
+app.engine("ejs", ejsMate);
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+// Middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+// Session configuration
 const sessionStore = MongoStore.create({
   mongoUrl: process.env.MONGO_URI,
   crypto: {
     secret: process.env.SESSION_SECRET_KEY || "thisshouldbeabettersecret",
   },
-  touchAfter: 24 * 3600,
+  touchAfter: 24 * 3600, // time period in seconds
 });
-
-sessionStore.on("error", () => {
-  console.log("ERROR in mongoose store.", err);
+sessionStore.on("error", (err) => {
+  console.error("Session Store Error:", err);
 });
 
 const sessionOptions = {
@@ -42,21 +62,21 @@ const sessionOptions = {
   cookie: {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week
     maxAge: 1000 * 60 * 60 * 24 * 7,
   },
 };
-
 app.use(session(sessionOptions));
 app.use(flash());
 
+// Passport configuration
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
-
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// Set locals for every response
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
@@ -65,45 +85,21 @@ app.use((req, res, next) => {
 });
 
 // Routes
-const listingRoutes = require("./routes/listings");
-const reviewRoutes = require("./routes/reviews");
-const authRoutes = require("./routes/auth");
-
-// Connect MongoDB
-async function main() {
-  await mongoose.connect(process.env.MONGO_URI);
-}
-main()
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.log(err));
-
-// Middleware
-app.engine("ejs", ejsMate);
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride("_method"));
-app.use(express.static(path.join(__dirname, "public")));
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-// Routes
 app.get("/", (req, res) => {
   res.redirect("/listings");
 });
-
 app.use("/listings", listingRoutes);
 app.use("/listings/:id/reviews", reviewRoutes);
 app.use("/", authRoutes);
-app.use("/", authRoutes);
 
-// Error Handler
+// Catch-all Error Handler
 app.use((err, req, res, next) => {
   const { statusCode = 500, message = "Something went wrong" } = err;
   res.status(statusCode).render("error", { message });
 });
 
-// Server
+// Start server
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+  console.log(`🚀 Server is running at http://localhost:${port}`);
 });
