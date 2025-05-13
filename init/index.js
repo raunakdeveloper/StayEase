@@ -34,7 +34,7 @@ const initDB = async () => {
         )}`,
         {
           headers: {
-            "User-Agent": "StayEaseApp/1.0 (prachiiyadav2409@gmail.com)",
+            "User-Agent": "StayEaseApp/1.0 (grsraunak@gmail.com)",
           },
         }
       );
